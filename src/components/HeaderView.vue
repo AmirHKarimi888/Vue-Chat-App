@@ -1,6 +1,12 @@
 <script setup>
 import { ref } from "vue";
 
+import { loggedUser } from "../auth"
+
+setTimeout(() => {
+  
+}, 1000)
+
 const drawer = ref(null);
 const isLogin = ref(false);
 </script>
@@ -20,7 +26,7 @@ const isLogin = ref(false);
     </v-app-bar>
 
     <v-navigation-drawer color="grey-darken-4" v-model="drawer" temporary>
-      <div v-if="isLogin">
+      <div v-if="loggedUser.isLogin">
         <v-list-item class="bg-grey-darken-3 pt-5 pb-5">
           <v-avatar>
             <v-img

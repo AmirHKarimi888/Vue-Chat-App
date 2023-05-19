@@ -83,7 +83,7 @@ export default {
       if (x.value === false) {
         users.value = [...users.value, newUser];
         Action.post(url + "/users", newUser).then(() => {
-          localStorage.setItem("authedUser", newUser.id);
+          localStorage.setItem("loggedUser", newUser.id);
           setTimeout(() => {
             window.location.href = "/";
           }, 1000);
