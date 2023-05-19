@@ -15,15 +15,7 @@ const isLogin = ref(false);
       <v-app-bar-title>Chat App</v-app-bar-title>
 
       <template v-slot:append>
-        <v-btn icon>
-          <v-icon>mdi-magnify</v-icon>
-        </v-btn>
-        <!-- <v-avatar>
-          <v-img
-            src="https://cdn.vuetifyjs.com/images/john.jpg"
-            alt="John"
-          ></v-img>
-        </v-avatar> -->
+        
       </template>
     </v-app-bar>
 
@@ -59,10 +51,7 @@ const isLogin = ref(false);
 
       <div v-else>
         <div class="text-center mt-15">
-          <v-btn
-            color="primary"
-            append-icon="mdi-account-circle"
-          >
+          <v-btn color="primary" append-icon="mdi-account-circle">
             Sign In
             <template v-slot:append>
               <v-icon color="white"></v-icon>
