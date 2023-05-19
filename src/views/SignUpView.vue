@@ -107,7 +107,6 @@ export default {
 </script>
 
 <template>
-  <main class="main">
     <v-card
       color="grey-darken-1"
       class="userRegister mx-auto"
@@ -162,5 +161,4 @@ export default {
         </p>
       </form>
     </v-card>
-  </main>
 </template>
