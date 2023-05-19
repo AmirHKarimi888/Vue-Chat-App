@@ -1,0 +1,13 @@
+{
+  "users": [
+    {
+      "id": "0e94e168-3ff4-4b3c-94e3-74fd98937c83",
+      "username": "Amir",
+      "email": "amirhk20021111@gmail.com",
+      "password": "12345678910",
+      "avatar": "https://xsgames.co/randomusers/assets/avatars/pixel/1.jpg",
+      "isAdmin": true,
+      "isLogin": true
+    }
+  ]
+}
