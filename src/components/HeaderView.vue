@@ -2,6 +2,7 @@
 import { ref } from "vue";
 
 const drawer = ref(null);
+const isLogin = ref(false);
 </script>
 
 <template>
@@ -27,32 +28,48 @@ const drawer = ref(null);
     </v-app-bar>
 
     <v-navigation-drawer color="grey-darken-4" v-model="drawer" temporary>
-      <v-list-item class="bg-grey-darken-3 pt-5 pb-5">
-        <v-avatar>
-          <v-img
-            src="https://cdn.vuetifyjs.com/images/john.jpg"
-            alt="John"
-          ></v-img>
-        </v-avatar>
-        <h4 class="mt-4">John</h4>
-        <h5 class="">john@email.com</h5>
-        <h5></h5>
-      </v-list-item>
+      <div v-if="isLogin">
+        <v-list-item class="bg-grey-darken-3 pt-5 pb-5">
+          <v-avatar>
+            <v-img
+              src="https://cdn.vuetifyjs.com/images/john.jpg"
+              alt="John"
+            ></v-img>
+          </v-avatar>
+          <h4 class="mt-4">John</h4>
+          <h5 class="">john@email.com</h5>
+          <h5></h5>
+        </v-list-item>
 
-      <v-divider></v-divider>
+        <v-divider></v-divider>
 
-      <v-list density="compact" nav>
-        <v-list-item
-          prepend-icon="mdi-view-dashboard"
-          title="Home"
-          value="home"
-        ></v-list-item>
-        <v-list-item
-          prepend-icon="mdi-forum"
-          title="About"
-          value="about"
-        ></v-list-item>
-      </v-list>
+        <v-list density="compact" nav>
+          <v-list-item
+            prepend-icon="mdi-view-dashboard"
+            title="Home"
+            value="home"
+          ></v-list-item>
+          <v-list-item
+            prepend-icon="mdi-forum"
+            title="About"
+            value="about"
+          ></v-list-item>
+        </v-list>
+      </div>
+
+      <div v-else>
+        <div class="text-center mt-15">
+          <v-btn
+            color="primary"
+            append-icon="mdi-account-circle"
+          >
+            Sign In
+            <template v-slot:append>
+              <v-icon color="white"></v-icon>
+            </template>
+          </v-btn>
+        </div>
+      </div>
     </v-navigation-drawer>
   </header>
 </template>
