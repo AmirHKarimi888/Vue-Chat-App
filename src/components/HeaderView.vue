@@ -14,12 +14,15 @@ const drawer = ref(null);
       <v-app-bar-title>Chat App</v-app-bar-title>
 
       <template v-slot:append>
-        <v-avatar>
+        <v-btn icon>
+          <v-icon>mdi-magnify</v-icon>
+        </v-btn>
+        <!-- <v-avatar>
           <v-img
             src="https://cdn.vuetifyjs.com/images/john.jpg"
             alt="John"
           ></v-img>
-        </v-avatar>
+        </v-avatar> -->
       </template>
     </v-app-bar>
 
