@@ -17,4 +17,4 @@ const logOut = () => {
   }, 1000);
 };
 
-export { loggedUser, logOut };
+export { loggedUser, id, logOut };

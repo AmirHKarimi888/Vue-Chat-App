@@ -3,6 +3,9 @@ import { ref } from "vue";
 
 import { loggedUser, logOut } from "../auth"
 
+import EditProfileView from "../components/EditProfileView.vue";
+const editProfileViewView = ref(false);
+
 setTimeout(() => {
   
 }, 1000)
@@ -43,10 +46,16 @@ const isLogin = ref(false);
 
         <v-list density="compact" nav>
           <v-list-item
-            prepend-icon="mdi-view-dashboard"
-            title="Home"
-            value="home"
+            @click="() => editProfileViewView = !editProfileViewView"
+            prepend-icon="mdi-account"
+            title="Edit Profile"
+            value="edit"
           ></v-list-item>
+
+          <v-list-item v-if="editProfileViewView">
+            <EditProfileView />
+          </v-list-item>
+
           <v-list-item
             prepend-icon="mdi-forum"
             title="About"
