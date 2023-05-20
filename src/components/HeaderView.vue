@@ -4,7 +4,10 @@ import { ref } from "vue";
 import { loggedUser, logOut } from "../auth"
 
 import EditProfileView from "../components/EditProfileView.vue";
+import FindUsersView from "../components/FindUsersView.vue";
+
 const editProfileViewView = ref(false);
+const findUsersViewView = ref(false);
 
 setTimeout(() => {
   
@@ -57,10 +60,15 @@ const isLogin = ref(false);
           </v-list-item>
 
           <v-list-item
-            prepend-icon="mdi-forum"
-            title="About"
-            value="about"
+            @click="() => findUsersViewView = !findUsersViewView"
+            prepend-icon="mdi-magnify"
+            title="Find Users"
+            value="find"
           ></v-list-item>
+
+          <v-list-item v-if="findUsersViewView">
+            <FindUsersView />
+          </v-list-item>
         </v-list>
       </div>
 
