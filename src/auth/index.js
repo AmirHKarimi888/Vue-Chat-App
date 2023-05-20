@@ -4,7 +4,17 @@ import { Action } from "../httpService";
 
 const loggedUser = ref({});
 const id = localStorage.getItem("loggedUser");
-Action.get(url + "/users/" + id, (response) => loggedUser.value = response.data);
+Action.get(
+  url + "/users/" + id,
+  (response) => (loggedUser.value = response.data)
+);
 
+const logOut = () => {
+  localStorage.setItem("loggedUser", 0);
 
-export { loggedUser };
+  setTimeout(() => {
+    window.location.reload();
+  }, 1000);
+};
+
+export { loggedUser, logOut };

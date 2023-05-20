@@ -1,6 +1,14 @@
 {
   "users": [
     {
+      "id": 0,
+      "username": "0",
+      "email": "",
+      "password": "",
+      "avatar": "",
+      "isLogin": false
+    },
+    {
       "id": "0e94e168-3ff4-4b3c-94e3-74fd98937c83",
       "username": "Amir",
       "email": "amirhk20021111@gmail.com",

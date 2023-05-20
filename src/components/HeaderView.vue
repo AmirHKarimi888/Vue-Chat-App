@@ -1,7 +1,7 @@
 <script setup>
 import { ref } from "vue";
 
-import { loggedUser } from "../auth"
+import { loggedUser, logOut } from "../auth"
 
 setTimeout(() => {
   
@@ -55,6 +55,8 @@ const isLogin = ref(false);
         </v-list>
       </div>
 
+
+      
       <div v-else>
         <div class="text-center mt-15">
           <v-btn color="primary" append-icon="mdi-account-circle">
@@ -65,6 +67,15 @@ const isLogin = ref(false);
           </v-btn>
         </div>
       </div>
+
+      <template v-slot:append>
+          <div v-if="loggedUser.isLogin" class="pa-2">
+            <v-btn @click="logOut" class="bg-orange" block> Logout </v-btn>
+          </div>
+          <!-- <div class="pa-2">
+            <v-btn class="bg-red" block> Delete Account </v-btn>
+          </div> -->
+      </template>
     </v-navigation-drawer>
   </header>
 </template>
