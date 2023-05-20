@@ -30,12 +30,12 @@ const isLogin = ref(false);
         <v-list-item class="bg-grey-darken-3 pt-5 pb-5">
           <v-avatar>
             <v-img
-              src="https://cdn.vuetifyjs.com/images/john.jpg"
-              alt="John"
+              :src="loggedUser.avatar"
+              alt="Avatar"
             ></v-img>
           </v-avatar>
-          <h4 class="mt-4">John</h4>
-          <h5 class="">john@email.com</h5>
+          <h4 class="mt-4">{{ loggedUser.username }}</h4>
+          <h5 class="">{{ loggedUser.email }}</h5>
           <h5></h5>
         </v-list-item>
 

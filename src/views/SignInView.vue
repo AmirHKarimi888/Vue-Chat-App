@@ -4,7 +4,6 @@ import { useField, useForm } from "vee-validate";
 import { url } from "../api";
 import { Action } from "../httpService";
 
-
 export default {
   setup() {
     const { handleSubmit, handleReset } = useForm({
@@ -71,39 +70,42 @@ export default {
 </script>
 
 <template>
-  <v-card
-    color="grey-darken-1"
-    class="userRegister mx-auto"
-    max-width="344"
-    title="User Registration"
-  >
-    <form @submit.prevent="submit" class="mx-5 my-5">
-      <v-text-field
-        v-model="email.value.value"
-        :error-messages="email.errorMessage.value"
-        label="E-mail"
-      ></v-text-field>
+  <div class="signIn">
+    <v-card
+      color="grey-darken-1"
+      class="userRegister mx-auto"
+      max-width="344"
+      title="User Registration"
+    >
+      <form @submit.prevent="submit" class="mx-5 my-5">
+        <v-text-field
+          v-model="email.value.value"
+          :error-messages="email.errorMessage.value"
+          label="E-mail"
+        ></v-text-field>
 
-      <v-text-field
-        v-model="password.value.value"
-        :counter="7"
-        :error-messages="password.errorMessage.value"
-        label="Password"
-      ></v-text-field>
+        <v-text-field
+          v-model="password.value.value"
+          :counter="7"
+          :error-messages="password.errorMessage.value"
+          label="Password"
+          type="password"
+        ></v-text-field>
 
-      <v-checkbox
-        v-model="checkbox.value.value"
-        :error-messages="checkbox.errorMessage.value"
-        value="1"
-        label="I am not a bot"
-        type="checkbox"
-      ></v-checkbox>
+        <v-checkbox
+          v-model="checkbox.value.value"
+          :error-messages="checkbox.errorMessage.value"
+          value="1"
+          label="I am not a bot"
+          type="checkbox"
+        ></v-checkbox>
 
-      <v-btn class="me-4" type="submit"> Login </v-btn>
+        <v-btn class="me-4" type="submit"> Login </v-btn>
 
-      <v-btn @click="handleReset"> Clear Form </v-btn>
+        <v-btn @click="handleReset"> Clear Form </v-btn>
 
-      <p class="mt-3 text-red">{{ notMatch }}</p>
-    </form>
-  </v-card>
+        <p class="mt-3 text-red">{{ notMatch }}</p>
+      </form>
+    </v-card>
+  </div>
 </template>

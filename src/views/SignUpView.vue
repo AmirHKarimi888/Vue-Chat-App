@@ -107,6 +107,7 @@ export default {
 </script>
 
 <template>
+  <div class="signUp">
     <v-card
       color="grey-darken-1"
       class="userRegister mx-auto"
@@ -155,10 +156,11 @@ export default {
 
         <p class="mt-5">
           Do you have an account?
-          <router-link style="text-decoration: none" to="/login"
-            >Login</router-link
+          <router-link style="text-decoration: none" to="/signin"
+            >Sign In</router-link
           >
         </p>
       </form>
     </v-card>
+  </div>
 </template>
