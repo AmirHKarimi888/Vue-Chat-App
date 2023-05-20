@@ -1,34 +1,32 @@
 <script>
-  export default {
-    data: () => ({
-      loaded: false,
-      loading: false,
-    }),
+export default {
+  data: () => ({
+    loaded: false,
+    loading: false,
+  }),
 
-    methods: {
-      onClick () {
-        this.loading = true
+  methods: {
+    onClick() {
+      this.loading = true;
 
-        setTimeout(() => {
-          this.loading = false
-          this.loaded = true
-        }, 2000)
-      },
+      setTimeout(() => {
+        this.loading = false;
+        this.loaded = true;
+      }, 2000);
     },
-  }
+  },
+};
 </script>
 
 <template>
-
-        <v-text-field
-          :loading="loading"
-          density="compact"
-          variant="solo"
-          label="Find Users"
-          append-inner-icon="mdi-magnify"
-          single-line
-          hide-details
-          @click:append-inner="onClick"
-        ></v-text-field>
-
+  <v-text-field
+    :loading="loading"
+    density="compact"
+    variant="solo"
+    label="Find Users"
+    append-inner-icon="mdi-magnify"
+    single-line
+    hide-details
+    @click:append-inner="onClick"
+  ></v-text-field>
 </template>
