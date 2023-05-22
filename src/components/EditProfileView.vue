@@ -15,20 +15,21 @@ export default {
 
   methods: {
     onSubmit() {
-      Action.delete(url + "/users/" + id).then(() => {
-        Action.post(url + "/users", {
-          id: loggedUser.value.id,
-          username: this.username,
-          email: this.email,
-          password: this.password,
-          avatar: loggedUser.value.avatar,
-          isAdmin: loggedUser.value.isAdmin,
-          isLogin: loggedUser.value.isLogin,
+      Action.delete(url + "/users/" + id)
+        .then(() => {
+          Action.post(url + "/users", {
+            id: loggedUser.value.id,
+            username: this.username,
+            email: this.email,
+            password: this.password,
+            avatar: loggedUser.value.avatar,
+            isAdmin: loggedUser.value.isAdmin,
+            isLogin: loggedUser.value.isLogin,
+          });
+        })
+        .then(() => {
+          window.location.reload();
         });
-      })
-      .then(() => {
-        window.location.reload();
-      });
     },
     required(v) {
       return !!v || "Field is required";

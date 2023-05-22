@@ -112,7 +112,7 @@ export default {
       color="grey-darken-1"
       class="userRegister mx-auto"
       max-width="344"
-      title="User Registration"
+      title="Sign Up"
     >
       <form @submit.prevent="submit" class="mx-5 my-5">
         <v-text-field
@@ -153,13 +153,6 @@ export default {
         <v-btn class="me-4" type="submit"> Signup </v-btn>
 
         <v-btn @click="handleReset"> Clear Form </v-btn>
-
-        <p class="mt-5">
-          Do you have an account?
-          <router-link style="text-decoration: none" to="/signin"
-            >Sign In</router-link
-          >
-        </p>
       </form>
     </v-card>
   </div>

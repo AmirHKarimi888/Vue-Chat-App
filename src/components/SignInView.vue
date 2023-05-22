@@ -75,7 +75,7 @@ export default {
       color="grey-darken-1"
       class="userRegister mx-auto"
       max-width="344"
-      title="User Registration"
+      title="Sign In"
     >
       <form @submit.prevent="submit" class="mx-5 my-5">
         <v-text-field
