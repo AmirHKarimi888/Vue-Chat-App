@@ -2,6 +2,7 @@
 import { ref } from "vue";
 import { Action } from "../httpService";
 import { url } from "../api";
+import { RouterLink } from "vue-router";
 
 const showUsers = ref(false);
 const loaded = ref(false);
@@ -13,20 +14,24 @@ const users = ref([]);
 const onClick = () => {
   Action.get(url + "/users", (response) => (users.value = response.data)).then(
     () => {
-      users.value = users.value.filter((user) => {
-        if (
-          user.username.includes(credential.value) ||
-          user.username
-            .toLowerCase()
-            .includes(credential.value.toLowerCase()) ||
-          user.username
-            .toUpperCase()
-            .includes(credential.value.toUpperCase()) ||
-          user.email.includes(credential.value)
-        ) {
-          return user;
-        }
-      });
+      if (credential.value === "") {
+        users.value = [];
+      } else {
+        users.value = users.value.filter((user) => {
+          if (
+            user.username.includes(credential.value) ||
+            user.username
+              .toLowerCase()
+              .includes(credential.value.toLowerCase()) ||
+            user.username
+              .toUpperCase()
+              .includes(credential.value.toUpperCase()) ||
+            user.email.includes(credential.value)
+          ) {
+            return user;
+          }
+        });
+      }
     }
   );
   loading.value = true;
@@ -61,10 +66,12 @@ const onClick = () => {
     >
       <v-list density="compact" nav>
         <v-list-item v-for="user in users" :key="user.username" value="edit">
-          <v-avatar>
+          <RouterLink to="">
+            <v-avatar>
             <v-img :src="user.avatar"></v-img>
           </v-avatar>
           <v-title class="ms-12">{{ user.username }}</v-title>
+          </RouterLink>
         </v-list-item>
       </v-list>
     </v-card>
