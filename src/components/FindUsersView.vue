@@ -2,7 +2,7 @@
 import { ref } from "vue";
 import { Action } from "../httpService";
 import { url } from "../api";
-import { RouterLink } from "vue-router";
+import { RouterLink, useRoute, useRouter } from "vue-router";
 
 const showUsers = ref(false);
 const loaded = ref(false);
@@ -42,6 +42,12 @@ const onClick = () => {
     showUsers.value = true;
   }, 1000);
 };
+
+const router = useRouter();
+
+const goToPath = (Id) => {
+  router.push({ name: "chat-page", params: { id: Id } })
+}
 </script>
 
 <template>
@@ -66,12 +72,12 @@ const onClick = () => {
     >
       <v-list density="compact" nav>
         <v-list-item v-for="user in users" :key="user.username" value="edit">
-          <RouterLink to="">
+          <a @click="() => goToPath(user.chatId)" class="text-decoration-none text-white">
             <v-avatar>
             <v-img :src="user.avatar"></v-img>
           </v-avatar>
-          <v-title class="ms-12">{{ user.username }}</v-title>
-          </RouterLink>
+          <a class="ms-12">{{ user.username }}</a>
+        </a>
         </v-list-item>
       </v-list>
     </v-card>

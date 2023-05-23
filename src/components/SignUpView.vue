@@ -63,6 +63,7 @@ export default {
     const submit = handleSubmit(() => {
       const newUser = {
         id: uuidv4(),
+        chatId: Math.floor(100000000000 + Math.random() * 900000000000),
         username: name.value.value,
         email: email.value.value,
         password: password.value.value,
