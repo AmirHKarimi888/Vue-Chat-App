@@ -16,6 +16,33 @@
       "avatar": "https://xsgames.co/randomusers/assets/avatars/pixel/1.jpg",
       "isAdmin": true,
       "isLogin": true
+    },
+    {
+      "id": "769807da-1195-46db-b4cb-38b096f28b66",
+      "username": "user",
+      "email": "user@email.com",
+      "password": "12345678910",
+      "avatar": "https://xsgames.co/randomusers/assets/avatars/pixel/3.jpg",
+      "isAdmin": false,
+      "isLogin": true
+    },
+    {
+      "id": "8c2a50a6-a4ec-402b-a65f-7dd594120cb6",
+      "username": "amir ali",
+      "email": "amirali@email.com",
+      "password": "12345678910",
+      "avatar": "https://xsgames.co/randomusers/assets/avatars/pixel/4.jpg",
+      "isAdmin": false,
+      "isLogin": true
+    },
+    {
+      "id": "1dabc116-922d-4c44-986d-7ab664b578bf",
+      "username": "amirmmd",
+      "email": "amirmohammad@email.com",
+      "password": "12345678910",
+      "avatar": "https://xsgames.co/randomusers/assets/avatars/pixel/5.jpg",
+      "isAdmin": false,
+      "isLogin": true
     }
   ]
 }
