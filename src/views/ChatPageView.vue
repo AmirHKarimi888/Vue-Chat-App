@@ -5,12 +5,11 @@ import { loggedUser } from "../auth";
 import { Action } from "../httpService";
 import { url } from "../api";
 
-const secondPersonChatId = ref("");
-secondPersonChatId.value = useRoute().params.chatId;
-
 const users = ref([]);
 const secondPerson = ref({});
-const secondPersonId = ref("");
+
+const secondPersonChatId = ref("");
+secondPersonChatId.value = useRoute().params.chatId;
 
 Action.get(url + "/users", (response) => (users.value = response.data))
   .then(() => {
@@ -20,14 +19,6 @@ Action.get(url + "/users", (response) => (users.value = response.data))
       }
     });
   })
-  .then(() => {
-    secondPersonId.value = secondPerson.value[0].id;
-  })
-  .then(() => {
-    secondPerson.value[0].contacts.push(...[{ "hi": "hi" }]);
-    secondPerson.value[0].contacts.push(...[{ "bye": "bye" }]);
-    console.log(secondPerson.value[0].contacts)
-  })
 
 const unitedId =
   parseInt(secondPersonChatId.value) + parseInt(loggedUser.value.chatId);
@@ -36,16 +27,47 @@ const createPage = () => {
   Action.post(url + "/comments", {
     id: unitedId,
   })
-  .then(() => {
-    loggedUser.value.contacts.push(...[{ id: secondPersonId.value }]);
-  })
-  .then(() => {
-    Action.delete(url + "/users/" + loggedUser.value.id).then(() => {
-      Action.post(url + "/users", {
-        ...loggedUser.value
+    .then(() => {
+      loggedUser.value.contacts.push(
+        ...[
+          {
+            id: secondPerson.value[0].id,
+            chatId: secondPerson.value[0].chatId,
+            username: secondPerson.value[0].username,
+            avatar: secondPerson.value[0].avatar,
+          },
+        ]
+      );
+    })
+    .then(() => {
+      Action.delete(url + "/users/" + loggedUser.value.id).then(() => {
+        Action.post(url + "/users", {
+          ...loggedUser.value,
+        });
       });
-    });
-  });
+    })
+
+
+    .then(() => {
+        secondPerson.value[0].contacts.push(
+        ...[
+          {
+            id: loggedUser.value.id,
+            chatId: loggedUser.value.chatId,
+            username: loggedUser.value.username,
+            avatar: loggedUser.value.avatar,
+          },
+        ]
+      );
+    })
+    .then(() => {
+      Action.delete(url + "/users/" + secondPerson.value[0].id).then(() => {
+        Action.post(url + "/users", {
+          ...secondPerson.value[0],
+        });
+      });
+    })
+    
 };
 
 const deletePage = () => {
