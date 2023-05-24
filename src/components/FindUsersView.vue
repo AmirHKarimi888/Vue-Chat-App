@@ -45,8 +45,13 @@ const onClick = () => {
 
 const router = useRouter();
 
-const goToPath = (Id) => {
-  router.push({ name: "chat-page", params: { id: Id } })
+const goToPath = (id, chatId) => {
+  router.push({ name: "chat-page", params: { chatId: chatId } })
+  .then(() => {
+    setTimeout(() => {
+      window.location.reload()
+    }, 500)
+  })
 }
 </script>
 
@@ -72,7 +77,7 @@ const goToPath = (Id) => {
     >
       <v-list density="compact" nav>
         <v-list-item v-for="user in users" :key="user.username" value="edit">
-          <a @click="() => goToPath(user.chatId)" class="text-decoration-none text-white">
+          <a @click="() => goToPath(user.id, user.chatId)" class="text-decoration-none text-white">
             <v-avatar>
             <v-img :src="user.avatar"></v-img>
           </v-avatar>

@@ -10,7 +10,7 @@ const router = createRouter({
       component: HomeView
     },
     {
-      path: '/chat/:id',
+      path: '/chat/:chatId',
       name: 'chat-page',
       component: () => import('../views/ChatPageView.vue')
     },

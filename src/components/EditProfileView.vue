@@ -23,6 +23,7 @@ export default {
             email: this.email,
             password: this.password,
             avatar: loggedUser.value.avatar,
+            contacts: loggedUser.value.contacts,
             isAdmin: loggedUser.value.isAdmin,
             isLogin: loggedUser.value.isLogin,
           });
