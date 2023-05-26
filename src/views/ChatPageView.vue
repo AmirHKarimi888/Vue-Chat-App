@@ -26,6 +26,8 @@ const unitedId =
 const createPage = () => {
   Action.post(url + "/comments", {
     id: unitedId,
+    chatName: loggedUser.value.username + ' - ' + secondPerson.value[0].username,
+    chats: []
   })
     .then(() => {
       loggedUser.value.contacts.push(

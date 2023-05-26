@@ -1,4 +1,6 @@
-<script setup></script>
+<script setup>
+import { drawer, contactsDrawer } from '../script';
+</script>
 
 <template>
   <v-sheet
@@ -21,7 +23,13 @@
         conversation in the right side hide bar.
       </p>
 
-      <v-btn variant="text" color="orange">Go to Login</v-btn>
+      <v-btn variant="text" color="orange" @click.stop="drawer = !drawer">Find Friends</v-btn>
+
+      <p class="text-body-2 mb-4 mt-4">
+        Also acess your contacts from here :
+      </p>
+
+      <v-btn variant="text" color="orange" @click.stop="contactsDrawer = !contactsDrawer">Open Contacts</v-btn>
     </div>
   </v-sheet>
 </template>
