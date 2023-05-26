@@ -1,24 +1,39 @@
 <script setup>
 import { useRoute } from "vue-router";
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import { loggedUser } from "../auth";
 import { Action } from "../httpService";
 import { url } from "../api";
 
+import { contactsDrawer } from "../script/index";
+import ContactsBarView from "../components/ContactsBarView.vue";
+
 const users = ref([]);
 const secondPerson = ref({});
 
+const secondPersonId = ref("");
 const secondPersonChatId = ref("");
 secondPersonChatId.value = useRoute().params.chatId;
+const secondPersonUsername = ref("");
+const secondPersonAvatar = ref("");
 
-Action.get(url + "/users", (response) => (users.value = response.data))
-  .then(() => {
-    secondPerson.value = users.value.filter((user) => {
-      if (parseInt(user.chatId) === parseInt(secondPersonChatId.value)) {
-        return { ...user };
-      }
+onMounted(() => {
+  Action.get(url + "/users", (response) => (users.value = response.data))
+    .then(() => {
+      secondPerson.value = users.value.filter((user) => {
+        if (parseInt(user.chatId) === parseInt(secondPersonChatId.value)) {
+          return { ...user };
+        }
+      });
+    })
+    .then(() => {
+      secondPersonId.value = secondPerson.value[0].id;
+      secondPersonUsername.value = secondPerson.value[0].username;
+      secondPersonAvatar.value = secondPerson.value[0].avatar;
     });
-  })
+});
+
+
 
 const unitedId =
   parseInt(secondPersonChatId.value) + parseInt(loggedUser.value.chatId);
@@ -26,17 +41,19 @@ const unitedId =
 const createPage = () => {
   Action.post(url + "/comments", {
     id: unitedId,
-    chatName: loggedUser.value.username + ' - ' + secondPerson.value[0].username,
-    chats: []
+    chatName:
+      loggedUser.value.username + " - " + secondPerson.value[0].username,
+    accepted: true,
+    chats: [],
   })
     .then(() => {
       loggedUser.value.contacts.push(
         ...[
           {
-            id: secondPerson.value[0].id,
-            chatId: secondPerson.value[0].chatId,
-            username: secondPerson.value[0].username,
-            avatar: secondPerson.value[0].avatar,
+            id: secondPersonId.value,
+            chatId: secondPersonChatId.value,
+            username: secondPersonUsername.value,
+            avatar: secondPersonAvatar.value,
           },
         ]
       );
@@ -49,9 +66,8 @@ const createPage = () => {
       });
     })
 
-
     .then(() => {
-        secondPerson.value[0].contacts.push(
+      secondPerson.value[0].contacts.push(
         ...[
           {
             id: loggedUser.value.id,
@@ -68,8 +84,7 @@ const createPage = () => {
           ...secondPerson.value[0],
         });
       });
-    })
-    
+    });
 };
 
 const deletePage = () => {
@@ -78,6 +93,35 @@ const deletePage = () => {
 </script>
 
 <template>
+  <header class="header">
+    <v-app-bar color="grey-darken-4" density="compact">
+      <v-app-bar-title>
+        <v-avatar>
+          <v-img :src="secondPersonAvatar" alt="Avatar"></v-img>
+        </v-avatar>
+        {{ secondPersonUsername }}
+      </v-app-bar-title>
+
+      <template v-slot:append>
+        <v-btn
+          icon
+          v-if="loggedUser.isLogin"
+          @click.stop="contactsDrawer = !contactsDrawer"
+        >
+          <v-icon>mdi-dots-vertical</v-icon>
+        </v-btn>
+      </template>
+    </v-app-bar>
+
+    <v-navigation-drawer
+      color="grey-darken-4"
+      v-model="contactsDrawer"
+      temporary
+      location="right"
+    >
+      <ContactsBarView />
+    </v-navigation-drawer>
+  </header>
   <div>
     <br /><br /><br /><br />
     <h1>Chat Page</h1>
