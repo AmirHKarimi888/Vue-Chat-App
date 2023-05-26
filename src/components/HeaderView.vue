@@ -8,13 +8,17 @@ import ContactsBarView from "./ContactsBarView.vue";
 
 const drawer = ref(null);
 const contactsDrawer = ref(null);
+
+const toggleDrawer = () => {
+  drawer.value = !drawer.value;
+}
 </script>
 
 <template>
   <header class="header">
     <v-app-bar color="grey-darken-4" density="compact">
       <template v-slot:prepend>
-        <v-app-bar-nav-icon v-if="loggedUser.isLogin" @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
+        <v-app-bar-nav-icon v-if="loggedUser.isLogin" @click.stop="toggleDrawer"></v-app-bar-nav-icon>
       </template>
 
       <v-app-bar-title>Chat App</v-app-bar-title>

@@ -16,14 +16,7 @@
       "email": "mmd@email.com",
       "password": "12345678910",
       "avatar": "https://xsgames.co/randomusers/assets/avatars/pixel/3.jpg",
-      "contacts": [
-        {
-          "id": "2f01e201-138c-44c3-aceb-4b86b888ecbf",
-          "chatId": 809852209196,
-          "username": "Amir",
-          "avatar": "https://xsgames.co/randomusers/assets/avatars/pixel/2.jpg"
-        }
-      ],
+      "contacts": [],
       "isAdmin": false,
       "isLogin": true
     },
@@ -34,14 +27,7 @@
       "email": "raz@email.com",
       "password": "12345678910",
       "avatar": "https://xsgames.co/randomusers/assets/avatars/pixel/4.jpg",
-      "contacts": [
-        {
-          "id": "2f01e201-138c-44c3-aceb-4b86b888ecbf",
-          "chatId": 809852209196,
-          "username": "Amir",
-          "avatar": "https://xsgames.co/randomusers/assets/avatars/pixel/2.jpg"
-        }
-      ],
+      "contacts": [],
       "isAdmin": false,
       "isLogin": true
     },
@@ -52,14 +38,7 @@
       "email": "hasan@email.com",
       "password": "12345678910",
       "avatar": "https://xsgames.co/randomusers/assets/avatars/pixel/5.jpg",
-      "contacts": [
-        {
-          "id": "2f01e201-138c-44c3-aceb-4b86b888ecbf",
-          "chatId": 809852209196,
-          "username": "Amir",
-          "avatar": "https://xsgames.co/randomusers/assets/avatars/pixel/2.jpg"
-        }
-      ],
+      "contacts": [],
       "isAdmin": false,
       "isLogin": true
     },
@@ -70,39 +49,10 @@
       "email": "amirhk20021111@gmail.com",
       "password": "12345678910",
       "avatar": "https://xsgames.co/randomusers/assets/avatars/pixel/2.jpg",
-      "contacts": [
-        {
-          "id": "e053ef2a-c6f9-44b9-abfb-112d2d406c90",
-          "chatId": 952100553332,
-          "username": "Mmd",
-          "avatar": "https://xsgames.co/randomusers/assets/avatars/pixel/3.jpg"
-        },
-        {
-          "id": "ff349950-bfcb-4068-813a-8a10da4d389c",
-          "chatId": 145796983880,
-          "username": "RZA",
-          "avatar": "https://xsgames.co/randomusers/assets/avatars/pixel/4.jpg"
-        },
-        {
-          "id": "ef04ba9d-bdc7-471b-be66-2af0a3c73e3a",
-          "chatId": 822027047179,
-          "username": "hasan",
-          "avatar": "https://xsgames.co/randomusers/assets/avatars/pixel/5.jpg"
-        }
-      ],
+      "contacts": [],
       "isAdmin": false,
       "isLogin": true
     }
   ],
-  "comments": [
-    {
-      "id": 1761952762528
-    },
-    {
-      "id": 955649193076
-    },
-    {
-      "id": 1631879256375
-    }
-  ]
+  "comments": []
 }
