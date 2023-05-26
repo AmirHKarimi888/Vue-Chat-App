@@ -15,6 +15,7 @@ const secondPersonId = ref("");
 const secondPersonChatId = ref("");
 secondPersonChatId.value = useRoute().params.chatId;
 const secondPersonUsername = ref("");
+const secondPersonEmail = ref("");
 const secondPersonAvatar = ref("");
 
 onMounted(() => {
@@ -29,11 +30,10 @@ onMounted(() => {
     .then(() => {
       secondPersonId.value = secondPerson.value[0].id;
       secondPersonUsername.value = secondPerson.value[0].username;
+      secondPersonEmail.value = secondPerson.value[0].email;
       secondPersonAvatar.value = secondPerson.value[0].avatar;
     });
 });
-
-
 
 const unitedId =
   parseInt(secondPersonChatId.value) + parseInt(loggedUser.value.chatId);
@@ -41,9 +41,9 @@ const unitedId =
 const createPage = () => {
   Action.post(url + "/comments", {
     id: unitedId,
-    chatName:
-      loggedUser.value.username + " - " + secondPerson.value[0].username,
-    accepted: true,
+    chatName: loggedUser.value.username + " - " + secondPersonUsername.value,
+    chatId: loggedUser.value.chatId + " - " + secondPersonChatId.value,
+    chatEmail : loggedUser.value.email + " - " + secondPersonEmail.value,
     chats: [],
   })
     .then(() => {
@@ -130,7 +130,7 @@ const deletePage = () => {
       <v-btn @click="createPage">Create Page</v-btn>
     </h3>
     <h3>
-      <v-btn @click="deletePage">Create Page</v-btn>
+      <v-btn @click="deletePage">Delete Page</v-btn>
     </h3>
   </div>
 </template>
