@@ -5,7 +5,7 @@ import { loggedUser } from "../auth";
 import { Action } from "../httpService";
 import { url } from "../api";
 
-import { drawer, contactsDrawer } from "../script/index";
+import { drawer, contactsDrawer, contactProfileDrawer } from "../script/index";
 import SideBarView from "../components/SidebarView.vue";
 import ContactsBarView from "../components/ContactsBarView.vue";
 
@@ -39,12 +39,12 @@ onMounted(() => {
 const unitedId =
   parseInt(secondPersonChatId.value) + parseInt(loggedUser.value.chatId);
 
-const createPage = () => {
+const addContact = () => {
   Action.post(url + "/comments", {
     id: unitedId,
     chatName: loggedUser.value.username + " - " + secondPersonUsername.value,
     chatId: loggedUser.value.chatId + " - " + secondPersonChatId.value,
-    chatEmail : loggedUser.value.email + " - " + secondPersonEmail.value,
+    chatEmail: loggedUser.value.email + " - " + secondPersonEmail.value,
     chats: [],
   })
     .then(() => {
@@ -88,8 +88,37 @@ const createPage = () => {
     });
 };
 
-const deletePage = () => {
-  Action.delete(url + "/comments/" + unitedId);
+const deleteContact = () => {
+  Action.delete(url + "/comments/" + unitedId)
+  .then(() => {
+      loggedUser.value.contacts = loggedUser.value.contacts.filter((contact) => {
+        if(contact.id !== secondPersonId.value) {
+          return contact;
+        }
+      })
+    })
+    .then(() => {
+      Action.delete(url + "/users/" + loggedUser.value.id).then(() => {
+        Action.post(url + "/users", {
+          ...loggedUser.value,
+        });
+      });
+    })
+
+    .then(() => {
+      secondPerson.value[0].contacts = secondPerson.value[0].contacts.filter((contact) => {
+        if(contact.id !== loggedUser.value.id) {
+          return contact;
+        }
+      })
+    })
+    .then(() => {
+      Action.delete(url + "/users/" + secondPersonId.value).then(() => {
+        Action.post(url + "/users", {
+          ...secondPerson.value[0],
+        });
+      });
+    })
 };
 </script>
 
@@ -102,7 +131,10 @@ const deletePage = () => {
           @click.stop="drawer = !drawer"
         ></v-app-bar-nav-icon>
       </template>
-      <v-app-bar-title>
+      <v-app-bar-title
+        style="cursor: pointer"
+        @click="contactProfileDrawer = !contactProfileDrawer"
+      >
         <v-avatar>
           <v-img :src="secondPersonAvatar" alt="Avatar"></v-img>
         </v-avatar>
@@ -132,16 +164,43 @@ const deletePage = () => {
     >
       <ContactsBarView />
     </v-navigation-drawer>
+
+    <v-navigation-drawer
+      color="grey-darken-4"
+      v-model="contactProfileDrawer"
+      temporary
+      location="top"
+    >
+      <v-list-item class="bg-grey-darken-3 pt-5 pb-5">
+        <v-avatar>
+          <v-img :src="secondPersonAvatar" alt="Avatar"></v-img>
+        </v-avatar>
+        <h4 class="mt-4">{{ secondPersonUsername }}</h4>
+        <h5 class="">{{ secondPersonEmail }}</h5>
+        <h5></h5>
+      </v-list-item>
+
+      <v-list density="compact" nav>
+
+      <v-list-item
+        @click="addContact"
+        prepend-icon="mdi-magnify"
+        title="Add To Your Contacts"
+        value=""
+      ></v-list-item>
+
+      <v-list-item
+      @click="deleteContact"
+        prepend-icon="mdi-door"
+        title="Block This User"
+        value=""
+      ></v-list-item>
+    </v-list>
+    </v-navigation-drawer>
   </header>
   <div>
     <br /><br /><br /><br />
     <h1>Chat Page</h1>
     <h2>Id : {{ unitedId }}</h2>
-    <h3>
-      <v-btn @click="createPage">Create Page</v-btn>
-    </h3>
-    <h3>
-      <v-btn @click="deletePage">Delete Page</v-btn>
-    </h3>
   </div>
 </template>
