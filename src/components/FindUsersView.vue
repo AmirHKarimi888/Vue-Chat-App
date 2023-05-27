@@ -3,6 +3,7 @@ import { ref } from "vue";
 import { Action } from "../httpService";
 import { url } from "../api";
 import { useRouter } from "vue-router";
+import { loggedUser } from "../auth";
 
 const showUsers = ref(false);
 const loaded = ref(false);
@@ -12,7 +13,15 @@ const credential = ref("");
 const users = ref([]);
 
 const onClick = () => {
-  Action.get(url + "/users", (response) => (users.value = response.data)).then(
+  Action.get(url + "/users", (response) => (users.value = response.data))
+  .then(() => {
+    users.value = users.value.filter((user) => {
+      if(user.id !== loggedUser.value.id && user.id !== 0) {
+        return user;
+      }
+    })
+  })
+  .then(
     () => {
       if (credential.value === "") {
         users.value = [];
@@ -67,6 +76,7 @@ const goToPath = (chatId) => {
       single-line
       hide-details
       @click:append-inner="onClick"
+      @keyup.enter="onClick"
     ></v-text-field>
 
     <v-card

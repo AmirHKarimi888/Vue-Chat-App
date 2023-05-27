@@ -5,7 +5,8 @@ import { loggedUser } from "../auth";
 import { Action } from "../httpService";
 import { url } from "../api";
 
-import { contactsDrawer } from "../script/index";
+import { drawer, contactsDrawer } from "../script/index";
+import SideBarView from "../components/SidebarView.vue";
 import ContactsBarView from "../components/ContactsBarView.vue";
 
 const users = ref([]);
@@ -95,6 +96,12 @@ const deletePage = () => {
 <template>
   <header class="header">
     <v-app-bar color="grey-darken-4" density="compact">
+      <template v-slot:prepend>
+        <v-app-bar-nav-icon
+          v-if="loggedUser.isLogin"
+          @click.stop="drawer = !drawer"
+        ></v-app-bar-nav-icon>
+      </template>
       <v-app-bar-title>
         <v-avatar>
           <v-img :src="secondPersonAvatar" alt="Avatar"></v-img>
@@ -112,6 +119,10 @@ const deletePage = () => {
         </v-btn>
       </template>
     </v-app-bar>
+
+    <v-navigation-drawer color="grey-darken-4" v-model="drawer" temporary>
+      <SideBarView />
+    </v-navigation-drawer>
 
     <v-navigation-drawer
       color="grey-darken-4"

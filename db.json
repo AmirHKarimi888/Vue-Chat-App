@@ -10,17 +10,6 @@
       "isLogin": false
     },
     {
-      "id": "ff349950-bfcb-4068-813a-8a10da4d389c",
-      "chatId": 145796983880,
-      "username": "RZA",
-      "email": "raz@email.com",
-      "password": "12345678910",
-      "avatar": "https://xsgames.co/randomusers/assets/avatars/pixel/4.jpg",
-      "contacts": [],
-      "isAdmin": false,
-      "isLogin": true
-    },
-    {
       "id": "ef04ba9d-bdc7-471b-be66-2af0a3c73e3a",
       "chatId": 822027047179,
       "username": "hasan",
@@ -60,6 +49,30 @@
           "chatId": "952100553332",
           "username": "Mmd",
           "avatar": "https://xsgames.co/randomusers/assets/avatars/pixel/3.jpg"
+        },
+        {
+          "id": "ff349950-bfcb-4068-813a-8a10da4d389c",
+          "chatId": "145796983880",
+          "username": "RZA",
+          "avatar": "https://xsgames.co/randomusers/assets/avatars/pixel/4.jpg"
+        }
+      ],
+      "isAdmin": false,
+      "isLogin": true
+    },
+    {
+      "id": "ff349950-bfcb-4068-813a-8a10da4d389c",
+      "chatId": 145796983880,
+      "username": "RZA",
+      "email": "raz@email.com",
+      "password": "12345678910",
+      "avatar": "https://xsgames.co/randomusers/assets/avatars/pixel/4.jpg",
+      "contacts": [
+        {
+          "id": "2f01e201-138c-44c3-aceb-4b86b888ecbf",
+          "chatId": 809852209196,
+          "username": "Amir",
+          "avatar": "https://xsgames.co/randomusers/assets/avatars/pixel/2.jpg"
         }
       ],
       "isAdmin": false,
@@ -72,6 +85,13 @@
       "chatName": "Amir - Mmd",
       "chatId": "809852209196 - 952100553332",
       "chatEmail": "amirhk20021111@gmail.com - mmd@email.com",
+      "chats": []
+    },
+    {
+      "id": 955649193076,
+      "chatName": "Amir - RZA",
+      "chatId": "809852209196 - 145796983880",
+      "chatEmail": "amirhk20021111@gmail.com - raz@email.com",
       "chats": []
     }
   ]
