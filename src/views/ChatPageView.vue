@@ -90,12 +90,14 @@ const addContact = () => {
 
 const deleteContact = () => {
   Action.delete(url + "/comments/" + unitedId)
-  .then(() => {
-      loggedUser.value.contacts = loggedUser.value.contacts.filter((contact) => {
-        if(contact.id !== secondPersonId.value) {
-          return contact;
+    .then(() => {
+      loggedUser.value.contacts = loggedUser.value.contacts.filter(
+        (contact) => {
+          if (contact.id !== secondPersonId.value) {
+            return contact;
+          }
         }
-      })
+      );
     })
     .then(() => {
       Action.delete(url + "/users/" + loggedUser.value.id).then(() => {
@@ -106,11 +108,13 @@ const deleteContact = () => {
     })
 
     .then(() => {
-      secondPerson.value[0].contacts = secondPerson.value[0].contacts.filter((contact) => {
-        if(contact.id !== loggedUser.value.id) {
-          return contact;
+      secondPerson.value[0].contacts = secondPerson.value[0].contacts.filter(
+        (contact) => {
+          if (contact.id !== loggedUser.value.id) {
+            return contact;
+          }
         }
-      })
+      );
     })
     .then(() => {
       Action.delete(url + "/users/" + secondPersonId.value).then(() => {
@@ -118,7 +122,7 @@ const deleteContact = () => {
           ...secondPerson.value[0],
         });
       });
-    })
+    });
 };
 </script>
 
@@ -181,26 +185,186 @@ const deleteContact = () => {
       </v-list-item>
 
       <v-list density="compact" nav>
+        <v-list-item
+          @click="addContact"
+          prepend-icon="mdi-magnify"
+          title="Add To Your Contacts"
+          value=""
+        ></v-list-item>
 
-      <v-list-item
-        @click="addContact"
-        prepend-icon="mdi-magnify"
-        title="Add To Your Contacts"
-        value=""
-      ></v-list-item>
-
-      <v-list-item
-      @click="deleteContact"
-        prepend-icon="mdi-door"
-        title="Block This User"
-        value=""
-      ></v-list-item>
-    </v-list>
+        <v-list-item
+          @click="deleteContact"
+          prepend-icon="mdi-door"
+          title="Block This User"
+          value=""
+        ></v-list-item>
+      </v-list>
     </v-navigation-drawer>
   </header>
+
   <div>
-    <br /><br /><br /><br />
-    <h1>Chat Page</h1>
-    <h2>Id : {{ unitedId }}</h2>
+    <v-virtual-scroll :items="items" height="500" item-height="50" class="mt-15">
+      <template v-slot:default="{ item }">
+        <v-list-item class="mt-3 bg-grey-darken-3 rounded-xl" min-width="33%" max-width="50%" height="90">
+          <template v-slot:prepend>
+            <v-avatar :color="item.color" class="text-white" size="40">
+              {{ item.initials }}
+            </v-avatar>
+          </template>
+
+          <v-list-item-title>{{ item.fullName }}</v-list-item-title>
+        </v-list-item>
+      </template>
+    </v-virtual-scroll>
   </div>
 </template>
+
+<script>
+export default {
+  data: () => ({
+    colors: [
+      "#2196F3",
+      "#90CAF9",
+      "#64B5F6",
+      "#42A5F5",
+      "#1E88E5",
+      "#1976D2",
+      "#1565C0",
+      "#0D47A1",
+      "#82B1FF",
+      "#448AFF",
+      "#2979FF",
+      "#2962FF",
+    ],
+    names: [
+      "Oliver",
+      "Jake",
+      "Noah",
+      "James",
+      "Jack",
+      "Connor",
+      "Liam",
+      "John",
+      "Harry",
+      "Callum",
+      "Mason",
+      "Robert",
+      "Jacob",
+      "Jacob",
+      "Jacob",
+      "Michael",
+      "Charlie",
+      "Kyle",
+      "William",
+      "William",
+      "Thomas",
+      "Joe",
+      "Ethan",
+      "David",
+      "George",
+      "Reece",
+      "Michael",
+      "Richard",
+      "Oscar",
+      "Rhys",
+      "Alexander",
+      "Joseph",
+      "James",
+      "Charlie",
+      "James",
+      "Charles",
+      "William",
+      "Damian",
+      "Daniel",
+      "Thomas",
+      "Amelia",
+      "Margaret",
+      "Emma",
+      "Mary",
+      "Olivia",
+      "Samantha",
+      "Olivia",
+      "Patricia",
+      "Isla",
+      "Bethany",
+    ],
+    surnames: [
+      "Smith",
+      "Anderson",
+      "Clark",
+      "Wright",
+      "Mitchell",
+      "Johnson",
+      "Thomas",
+      "Rodriguez",
+      "Lopez",
+      "Perez",
+      "Williams",
+      "Jackson",
+      "Lewis",
+      "Hill",
+      "Roberts",
+      "Jones",
+      "White",
+      "Lee",
+      "Scott",
+      "Turner",
+      "Brown",
+      "Harris",
+      "Walker",
+      "Green",
+      "Phillips",
+      "Davis",
+      "Martin",
+      "Hall",
+      "Adams",
+      "Campbell",
+      "Miller",
+      "Thompson",
+      "Allen",
+      "Baker",
+      "Parker",
+      "Wilson",
+      "Garcia",
+      "Young",
+      "Gonzalez",
+      "Evans",
+      "Moore",
+      "Martinez",
+      "Hernandez",
+      "Nelson",
+      "Edwards",
+      "Taylor",
+      "Robinson",
+      "King",
+      "Carter",
+      "Collins",
+    ],
+  }),
+
+  computed: {
+    items() {
+      const namesLength = this.names.length;
+      const surnamesLength = this.surnames.length;
+      const colorsLength = this.colors.length;
+
+      return Array.from({ length: 20 }, (k, v) => {
+        const name = this.names[this.genRandomIndex(namesLength)];
+        const surname = this.surnames[this.genRandomIndex(surnamesLength)];
+
+        return {
+          color: this.colors[this.genRandomIndex(colorsLength)],
+          fullName: `${name} ${surname}`,
+          initials: `${name[0]} ${surname[0]}`,
+        };
+      });
+    },
+  },
+
+  methods: {
+    genRandomIndex(length) {
+      return Math.ceil(Math.random() * (length - 1));
+    },
+  },
+};
+</script>
