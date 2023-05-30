@@ -124,6 +124,8 @@ const deleteContact = () => {
       });
     });
 };
+
+const x = ref(false);
 </script>
 
 <template>
@@ -202,20 +204,25 @@ const deleteContact = () => {
     </v-navigation-drawer>
   </header>
 
-  <div>
-    <v-virtual-scroll :items="items" height="500" item-height="50" class="mt-15">
-      <template v-slot:default="{ item }">
-        <v-list-item class="mt-3 bg-grey-darken-3 rounded-xl" min-width="33%" max-width="50%" height="90">
-          <template v-slot:prepend>
-            <v-avatar :color="item.color" class="text-white" size="40">
-              {{ item.initials }}
-            </v-avatar>
-          </template>
-
-          <v-list-item-title>{{ item.fullName }}</v-list-item-title>
-        </v-list-item>
+  <div class="mx-9">
+    <v-list style="max-height: 500px" class="overflow-y-auto mt-15">
+      <template v-slot>
+        <v-list-item min-height="100" :class="x === true ? 'bg-grey-darken-3 mt-3 rounded-xl' : 
+        'bg-indigo-darken-3 mt-3 mx-auto me-5 rounded-xl'" width="60%">
+          <v-list-tile>
+          <v-list-tile-content>
+            <br>
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Praesentium dolorum ipsum non nisi pariatur veniam nemo doloremque cumque veritatis? Officia quam reiciendis perferendis, obcaecati ad sapiente minus molestias eaque ratione?
+            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Facilis nulla esse veritatis soluta ullam! Qui, impedit adipisci distinctio aut excepturi vitae molestiae aliquid cumque deserunt, illum, consectetur modi nobis ipsa.
+            <br><br>
+          </v-list-tile-content>
+          <v-list-tile-footer>
+            6:08 PM
+          </v-list-tile-footer>
+        </v-list-tile>
+        </v-list-item>        
       </template>
-    </v-virtual-scroll>
+    </v-list>
   </div>
 </template>
 
@@ -368,3 +375,20 @@ export default {
   },
 };
 </script>
+
+<style>
+.chatPosts {
+  overflow-y: scroll;
+}
+.chatPost {
+  width: 60%;
+  min-height: 150px;
+  display: grid;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
+}
+.chatPost p {
+  margin: 15px;
+}
+</style>
