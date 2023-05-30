@@ -5,6 +5,9 @@ import { loggedUser } from "../auth";
 import { Action } from "../httpService";
 import { url } from "../api";
 
+import { getDatabase, set, get, ref as REF, child } from "firebase/database";
+import { database } from "../firebase";
+
 import { drawer, contactsDrawer, contactProfileDrawer } from "../script/index";
 import SideBarView from "../components/SidebarView.vue";
 import ContactsBarView from "../components/ContactsBarView.vue";
@@ -19,7 +22,20 @@ const secondPersonUsername = ref("");
 const secondPersonEmail = ref("");
 const secondPersonAvatar = ref("");
 
+const dbRef = REF(database);
+const messages = ref([]);
+
 onMounted(() => {
+  get(child(dbRef, `/chats/${unitedId}/messages`)).then((snapshot) => {
+  if (snapshot.exists()) {
+    messages.value = snapshot.val();
+  } else {
+    console.log("No data available");
+  }
+}).catch((error) => {
+  console.error(error);
+});
+
   Action.get(url + "/users", (response) => (users.value = response.data))
     .then(() => {
       secondPerson.value = users.value.filter((user) => {
@@ -40,12 +56,11 @@ const unitedId =
   parseInt(secondPersonChatId.value) + parseInt(loggedUser.value.chatId);
 
 const addContact = () => {
-  Action.post(url + "/comments", {
-    id: unitedId,
+  set(REF(database, '/chats/' + unitedId), {
     chatName: loggedUser.value.username + " - " + secondPersonUsername.value,
     chatId: loggedUser.value.chatId + " - " + secondPersonChatId.value,
     chatEmail: loggedUser.value.email + " - " + secondPersonEmail.value,
-    chats: [],
+    messages: "",
   })
     .then(() => {
       loggedUser.value.contacts.push(
@@ -126,6 +141,19 @@ const deleteContact = () => {
 };
 
 const x = ref(false);
+
+const newMessage = ref("");
+
+const addNewMessage = () => {
+  messages.value.push(...[{ 
+    message: newMessage.value,
+    date: new Date().getHours() + ":" + new Date().getMinutes(),
+    author: loggedUser.value.chatId
+   }])
+  set(REF(database, '/chats/' + unitedId + '/messages'),
+    messages.value
+  )
+}
 </script>
 
 <template>
@@ -223,10 +251,20 @@ const x = ref(false);
         </v-list-item>        
       </template>
     </v-list>
+
+    <v-responsive
+    class="mx-auto"
+    max-width="344"
+  >
+    <v-text-field
+      label="First name"
+      hide-details="auto"
+      v-model="newMessage"
+      @keyup.enter="addNewMessage"
+    ></v-text-field>
+  </v-responsive>
   </div>
 </template>
-
-
 
 <style>
 .chatPosts {

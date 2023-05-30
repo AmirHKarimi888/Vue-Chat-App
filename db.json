@@ -37,6 +37,30 @@
       ]
     },
     {
+      "id": "ff349950-bfcb-4068-813a-8a10da4d389c",
+      "chatId": 145796983880,
+      "username": "RZA",
+      "email": "raz@email.com",
+      "password": "12345678910",
+      "avatar": "https://xsgames.co/randomusers/assets/avatars/pixel/4.jpg",
+      "contacts": [
+        {
+          "id": "2f01e201-138c-44c3-aceb-4b86b888ecbf",
+          "chatId": 809852209196,
+          "username": "Amir",
+          "avatar": "https://xsgames.co/randomusers/assets/avatars/pixel/2.jpg"
+        },
+        {
+          "id": "2f01e201-138c-44c3-aceb-4b86b888ecbf",
+          "chatId": 809852209196,
+          "username": "Amir",
+          "avatar": "https://xsgames.co/randomusers/assets/avatars/pixel/2.jpg"
+        }
+      ],
+      "isAdmin": false,
+      "isLogin": true
+    },
+    {
       "id": "2f01e201-138c-44c3-aceb-4b86b888ecbf",
       "chatId": 809852209196,
       "username": "Amir",
@@ -55,24 +79,12 @@
           "chatId": "145796983880",
           "username": "RZA",
           "avatar": "https://xsgames.co/randomusers/assets/avatars/pixel/4.jpg"
-        }
-      ],
-      "isAdmin": false,
-      "isLogin": true
-    },
-    {
-      "id": "ff349950-bfcb-4068-813a-8a10da4d389c",
-      "chatId": 145796983880,
-      "username": "RZA",
-      "email": "raz@email.com",
-      "password": "12345678910",
-      "avatar": "https://xsgames.co/randomusers/assets/avatars/pixel/4.jpg",
-      "contacts": [
+        },
         {
-          "id": "2f01e201-138c-44c3-aceb-4b86b888ecbf",
-          "chatId": 809852209196,
-          "username": "Amir",
-          "avatar": "https://xsgames.co/randomusers/assets/avatars/pixel/2.jpg"
+          "id": "ff349950-bfcb-4068-813a-8a10da4d389c",
+          "chatId": "145796983880",
+          "username": "RZA",
+          "avatar": "https://xsgames.co/randomusers/assets/avatars/pixel/4.jpg"
         }
       ],
       "isAdmin": false,
