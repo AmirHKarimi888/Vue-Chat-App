@@ -6,9 +6,6 @@ import { v4 as uuidv4 } from "uuid";
 import { set, get, ref as REF, child } from "firebase/database";
 import { database } from "../firebase";
 
-import { createUserWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../firebase";
-
 export default {
   setup() {
     const { handleSubmit, handleReset } = useForm({
@@ -67,9 +64,6 @@ export default {
             console.log("No data available");
           }
         })
-        .then(() => {
-          console.log(users.value);
-        });
     });
 
     //   (values) => {
@@ -80,7 +74,7 @@ export default {
       const userId = uuidv4();
 
       const newUser = {
-        uid: userId,
+        id: userId,
         chatId: Math.floor(100000000000 + Math.random() * 900000000000),
         username: name.value.value,
         email: email.value.value,
@@ -93,17 +87,19 @@ export default {
         isLogin: true,
       };
 
-      createUserWithEmailAndPassword(auth, email.value.value, password.value.value)
-        .then(() => {
-          // Signed in
-          const user = newUser;
-          // ...
-        })
-        .catch((error) => {
-          const errorCode = error.code;
-          const errorMessage = error.message;
-          // ..
-        });
+      const x = ref(false);
+      users.value.map((user) => {
+        if (user.email.includes(email.value.value) === true) {
+          x.value = true;
+        }
+      });
+
+      if (x.value === false) {
+        users.value.push(...[newUser]);
+        set(REF(database, "/users/"), users.value);
+      } else if (x.value === true) {
+        alert("Email exists! Try again.");
+      }
     });
 
     return {
