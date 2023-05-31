@@ -10,7 +10,6 @@ import ContactsBarView from "../components/ContactsBarView.vue";
 
 import DefaultHomeView from "../components/DefaultHomeView.vue";
 
-console.log(loggedUser.value)
 </script>
 
 <template>

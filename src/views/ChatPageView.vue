@@ -1,159 +1,33 @@
 <script setup>
 import { useRoute } from "vue-router";
 import { ref, onMounted } from "vue";
-import { loggedUser } from "../auth";
-import { Action } from "../httpService";
-import { url } from "../api";
 
-import { getDatabase, set, get, ref as REF, child } from "firebase/database";
+
+import { set, get, ref as REF, child } from "firebase/database";
 import { database } from "../firebase";
 
 import { drawer, contactsDrawer, contactProfileDrawer } from "../script/index";
 import SideBarView from "../components/SidebarView.vue";
 import ContactsBarView from "../components/ContactsBarView.vue";
 
-const users = ref([]);
-const secondPerson = ref({});
 
-const secondPersonId = ref("");
-const secondPersonChatId = ref("");
-secondPersonChatId.value = useRoute().params.chatId;
-const secondPersonUsername = ref("");
-const secondPersonEmail = ref("");
-const secondPersonAvatar = ref("");
-
-const dbRef = REF(database);
-const messages = ref([]);
-
-onMounted(() => {
-  get(child(dbRef, `/chats/${unitedId}/messages`)).then((snapshot) => {
-  if (snapshot.exists()) {
-    messages.value = snapshot.val();
-  } else {
-    console.log("No data available");
-  }
-}).catch((error) => {
-  console.error(error);
-});
-
-  Action.get(url + "/users", (response) => (users.value = response.data))
-    .then(() => {
-      secondPerson.value = users.value.filter((user) => {
-        if (parseInt(user.chatId) === parseInt(secondPersonChatId.value)) {
-          return { ...user };
-        }
-      });
-    })
-    .then(() => {
-      secondPersonId.value = secondPerson.value[0].id;
-      secondPersonUsername.value = secondPerson.value[0].username;
-      secondPersonEmail.value = secondPerson.value[0].email;
-      secondPersonAvatar.value = secondPerson.value[0].avatar;
-    });
-});
-
-const unitedId =
-  parseInt(secondPersonChatId.value) + parseInt(loggedUser.value.chatId);
-
-const addContact = () => {
-  set(REF(database, '/chats/' + unitedId), {
-    chatName: loggedUser.value.username + " - " + secondPersonUsername.value,
-    chatId: loggedUser.value.chatId + " - " + secondPersonChatId.value,
-    chatEmail: loggedUser.value.email + " - " + secondPersonEmail.value,
-    messages: "",
-  })
-    .then(() => {
-      loggedUser.value.contacts.push(
-        ...[
-          {
-            id: secondPersonId.value,
-            chatId: secondPersonChatId.value,
-            username: secondPersonUsername.value,
-            avatar: secondPersonAvatar.value,
-          },
-        ]
-      );
-    })
-    .then(() => {
-      Action.delete(url + "/users/" + loggedUser.value.id).then(() => {
-        Action.post(url + "/users", {
-          ...loggedUser.value,
-        });
-      });
-    })
-
-    .then(() => {
-      secondPerson.value[0].contacts.push(
-        ...[
-          {
-            id: loggedUser.value.id,
-            chatId: loggedUser.value.chatId,
-            username: loggedUser.value.username,
-            avatar: loggedUser.value.avatar,
-          },
-        ]
-      );
-    })
-    .then(() => {
-      Action.delete(url + "/users/" + secondPerson.value[0].id).then(() => {
-        Action.post(url + "/users", {
-          ...secondPerson.value[0],
-        });
-      });
-    });
-};
-
-const deleteContact = () => {
-  Action.delete(url + "/comments/" + unitedId)
-    .then(() => {
-      loggedUser.value.contacts = loggedUser.value.contacts.filter(
-        (contact) => {
-          if (contact.id !== secondPersonId.value) {
-            return contact;
-          }
-        }
-      );
-    })
-    .then(() => {
-      Action.delete(url + "/users/" + loggedUser.value.id).then(() => {
-        Action.post(url + "/users", {
-          ...loggedUser.value,
-        });
-      });
-    })
-
-    .then(() => {
-      secondPerson.value[0].contacts = secondPerson.value[0].contacts.filter(
-        (contact) => {
-          if (contact.id !== loggedUser.value.id) {
-            return contact;
-          }
-        }
-      );
-    })
-    .then(() => {
-      Action.delete(url + "/users/" + secondPersonId.value).then(() => {
-        Action.post(url + "/users", {
-          ...secondPerson.value[0],
-        });
-      });
-    });
-};
 
 const x = ref(false);
 
 const newMessage = ref("");
 
 const addNewMessage = () => {
-  messages.value.push(...[{ 
-    message: newMessage.value,
-    date: new Date().getHours() + ":" + new Date().getMinutes(),
-    author: loggedUser.value.chatId
-   }])
-  set(REF(database, '/chats/' + unitedId + '/messages'),
-    messages.value
-  )
-}
+  messages.value.push(
+    ...[
+      {
+        message: newMessage.value,
+        date: new Date().getHours() + ":" + new Date().getMinutes(),
+        author: loggedUser.value.chatId,
+      },
+    ]
+  );
+  set(REF(database, "/chats/" + unitedId + "/messages"), messages.value);
+};
 </script>
 
 <template>
@@ -235,34 +109,35 @@ const addNewMessage = () => {
   <div class="mx-9">
     <v-list style="max-height: 500px" class="overflow-y-auto mt-15">
       <template v-slot>
-        <v-list-item min-height="100" :class="x === true ? 'bg-grey-darken-3 mt-3 rounded-xl' : 
-        'bg-indigo-darken-3 mt-3 mx-auto me-5 rounded-xl'" width="60%">
+        <v-list-item v-for="message in messages" :key="message"
+          min-height="100"
+          :class="
+          message.author === loggedUser.chatId
+              ? 'bg-indigo-darken-3 mt-3 mx-auto me-5 rounded-xl'
+              : 'bg-grey-darken-3 mt-3 rounded-xl' 
+          "
+          width="60%"
+        >
           <v-list-tile>
-          <v-list-tile-content>
-            <br>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Praesentium dolorum ipsum non nisi pariatur veniam nemo doloremque cumque veritatis? Officia quam reiciendis perferendis, obcaecati ad sapiente minus molestias eaque ratione?
-            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Facilis nulla esse veritatis soluta ullam! Qui, impedit adipisci distinctio aut excepturi vitae molestiae aliquid cumque deserunt, illum, consectetur modi nobis ipsa.
-            <br><br>
-          </v-list-tile-content>
-          <v-list-tile-footer>
-            6:08 PM
-          </v-list-tile-footer>
-        </v-list-tile>
-        </v-list-item>        
+            <v-list-tile-content>
+              <br />
+              {{ message.message }}
+              <br /><br />
+            </v-list-tile-content>
+            <v-list-tile-footer> 6:08 PM </v-list-tile-footer>
+          </v-list-tile>
+        </v-list-item>
       </template>
     </v-list>
 
-    <v-responsive
-    class="mx-auto"
-    max-width="344"
-  >
-    <v-text-field
-      label="First name"
-      hide-details="auto"
-      v-model="newMessage"
-      @keyup.enter="addNewMessage"
-    ></v-text-field>
-  </v-responsive>
+    <v-responsive class="mx-auto" max-width="344">
+      <v-text-field
+        label="First name"
+        hide-details="auto"
+        v-model="newMessage"
+        @keyup.enter="addNewMessage"
+      ></v-text-field>
+    </v-responsive>
   </div>
 </template>
 

@@ -1,7 +1,9 @@
 <script>
 import { url } from "../api";
-import { loggedUser, id } from "../auth";
-import { Action } from "../httpService";
+import { loggedUser, accessId } from "../auth";
+
+import { set, get, ref as REF, child } from "firebase/database";
+import { database } from "../firebase";
 
 export default {
   data: () => ({
@@ -15,22 +17,18 @@ export default {
 
   methods: {
     onSubmit() {
-      Action.delete(url + "/users/" + id)
-        .then(() => {
-          Action.post(url + "/users", {
-            id: loggedUser.value.id,
-            username: this.username,
-            email: this.email,
-            password: this.password,
-            avatar: loggedUser.value.avatar,
-            contacts: loggedUser.value.contacts,
-            isAdmin: loggedUser.value.isAdmin,
-            isLogin: loggedUser.value.isLogin,
-          });
-        })
-        .then(() => {
-          window.location.reload();
-        });
+      set(REF(database, "/users/" + accessId.value), {
+        id: loggedUser.value.id,
+        chatId: loggedUser.value.chatId,
+        username: this.username,
+        email: this.email,
+        password: this.password,
+        avatar: loggedUser.value.avatar,
+        isAdmin: loggedUser.value.isAdmin,
+        isLogin: loggedUser.value.isLogin,
+      }).then(() => {
+        window.location.reload();
+      });
     },
     required(v) {
       return !!v || "Field is required";

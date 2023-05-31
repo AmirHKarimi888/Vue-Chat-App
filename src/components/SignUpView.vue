@@ -52,8 +52,8 @@ export default {
     const checkbox = useField("checkbox");
 
     const users = ref([]);
-
     const dbRef = REF(database);
+    const userId = ref("");
 
     onMounted(() => {
       get(child(dbRef, `/users`))
@@ -71,10 +71,10 @@ export default {
     // }
 
     const submit = handleSubmit(() => {
-      const userId = uuidv4();
+      userId.value = uuidv4();
 
       const newUser = {
-        id: userId,
+        id: userId.value,
         chatId: Math.floor(100000000000 + Math.random() * 900000000000),
         username: name.value.value,
         email: email.value.value,
@@ -96,7 +96,13 @@ export default {
 
       if (x.value === false) {
         users.value.push(...[newUser]);
-        set(REF(database, "/users/"), users.value);
+        set(REF(database, "/users/"), users.value)
+        .then(() => {
+          localStorage.setItem("loggedUser", userId.value);
+        })
+        .then(() => {
+          window.location.reload();
+        })
       } else if (x.value === true) {
         alert("Email exists! Try again.");
       }

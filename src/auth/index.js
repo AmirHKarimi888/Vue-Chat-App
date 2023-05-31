@@ -41,4 +41,4 @@ const logOut = () => {
   }, 1000);
 };
 
-export { loggedUser, id, logOut };
+export { loggedUser, accessId, users, logOut };

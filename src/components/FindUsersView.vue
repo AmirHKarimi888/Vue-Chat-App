@@ -1,28 +1,36 @@
 <script setup>
 import { ref } from "vue";
-import { Action } from "../httpService";
-import { url } from "../api";
-import { useRouter } from "vue-router";
 import { loggedUser } from "../auth";
+import { useRouter } from "vue-router";
+
+import { get, ref as REF, child } from "firebase/database";
+import { database } from "../firebase";
 
 const showUsers = ref(false);
 const loaded = ref(false);
 const loading = ref(false);
 
 const credential = ref("");
+
 const users = ref([]);
+const dbRef = REF(database);
 
 const onClick = () => {
-  Action.get(url + "/users", (response) => (users.value = response.data))
-  .then(() => {
-    users.value = users.value.filter((user) => {
-      if(user.id !== loggedUser.value.id && user.id !== 0) {
-        return user;
+  get(child(dbRef, `/users/`))
+    .then((snapshot) => {
+      if (snapshot.exists()) {
+        users.value = snapshot.val();
+      } else {
+        console.log("No data available");
       }
     })
-  })
-  .then(
-    () => {
+    .then(() => {
+      users.value = users.value.filter((user) => {
+        if (user.id !== loggedUser.value.id && user.id !== 0) {
+          return user;
+        }
+      });
+
       if (credential.value === "") {
         users.value = [];
       } else {
@@ -41,8 +49,8 @@ const onClick = () => {
           }
         });
       }
-    }
-  );
+    });
+
   loading.value = true;
 
   setTimeout(() => {
@@ -55,13 +63,12 @@ const onClick = () => {
 const router = useRouter();
 
 const goToPath = (chatId) => {
-  router.push({ name: "chat-page", params: { chatId: chatId } })
-  .then(() => {
+  router.push({ name: "chat-page", params: { chatId: chatId } }).then(() => {
     setTimeout(() => {
-      window.location.reload()
-    }, 100)
-  })
-}
+      window.location.reload();
+    }, 100);
+  });
+};
 </script>
 
 <template>
@@ -87,12 +94,15 @@ const goToPath = (chatId) => {
     >
       <v-list density="compact" nav>
         <v-list-item v-for="user in users" :key="user.username" value="edit">
-          <a @click="() => goToPath(user.chatId)" class="text-decoration-none text-white">
+          <a
+            @click="() => goToPath(user.chatId)"
+            class="text-decoration-none text-white"
+          >
             <v-avatar>
-            <v-img :src="user.avatar"></v-img>
-          </v-avatar>
-          <a class="ms-12">{{ user.username }}</a>
-        </a>
+              <v-img :src="user.avatar"></v-img>
+            </v-avatar>
+            <a class="ms-12">{{ user.username }}</a>
+          </a>
         </v-list-item>
       </v-list>
     </v-card>
