@@ -1,9 +1,13 @@
 <script>
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import { useField, useForm } from "vee-validate";
 import { v4 as uuidv4 } from "uuid";
-import { Action } from "../httpService";
-import { url } from "../api";
+
+import { set, get, ref as REF, child } from "firebase/database";
+import { database } from "../firebase";
+
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../firebase";
 
 export default {
   setup() {
@@ -51,18 +55,32 @@ export default {
     const checkbox = useField("checkbox");
 
     const users = ref([]);
-    Action.get(
-      url + "/users",
-      (response) => (users.value = response.data)
-    ).then(() => {});
+
+    const dbRef = REF(database);
+
+    onMounted(() => {
+      get(child(dbRef, `/users`))
+        .then((snapshot) => {
+          if (snapshot.exists()) {
+            users.value = snapshot.val();
+          } else {
+            console.log("No data available");
+          }
+        })
+        .then(() => {
+          console.log(users.value);
+        });
+    });
 
     //   (values) => {
     //   //alert(JSON.stringify(values, null, 2))
     // }
 
     const submit = handleSubmit(() => {
+      const userId = uuidv4();
+
       const newUser = {
-        id: uuidv4(),
+        uid: userId,
         chatId: Math.floor(100000000000 + Math.random() * 900000000000),
         username: name.value.value,
         email: email.value.value,
@@ -75,24 +93,17 @@ export default {
         isLogin: true,
       };
 
-      const x = ref(false);
-      users.value.map((user) => {
-        if (user.email.includes(email.value.value) === true) {
-          x.value = true;
-        }
-      });
-
-      if (x.value === false) {
-        users.value = [...users.value, newUser];
-        Action.post(url + "/users", newUser).then(() => {
-          localStorage.setItem("loggedUser", newUser.id);
-          setTimeout(() => {
-            window.location.href = "/";
-          }, 1000);
+      createUserWithEmailAndPassword(auth, email.value.value, password.value.value)
+        .then(() => {
+          // Signed in
+          const user = newUser;
+          // ...
+        })
+        .catch((error) => {
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          // ..
         });
-      } else if (x.value === true) {
-        alert("Email exists! Try again.");
-      }
     });
 
     return {

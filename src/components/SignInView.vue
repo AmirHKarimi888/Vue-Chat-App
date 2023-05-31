@@ -1,8 +1,9 @@
 <script>
 import { ref } from "vue";
 import { useField, useForm } from "vee-validate";
-import { url } from "../api";
-import { Action } from "../httpService";
+
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from "../firebase";
 
 export default {
   setup() {
@@ -28,31 +29,17 @@ export default {
     const password = useField("password");
     const checkbox = useField("checkbox");
 
-    const users = ref([]);
-    Action.get(
-      url + "/users",
-      (response) => (users.value = response.data)
-    ).then(() => {});
-
-    //   (values) => {
-    //   //alert(JSON.stringify(values, null, 2))
-    // }
-
-    const notMatch = ref("");
-
     const submit = handleSubmit(() => {
-      users.value.map((user) => {
-        if (
-          user.email === email.value.value &&
-          user.password === password.value.value
-        ) {
-          notMatch.value = "";
-          localStorage.setItem("loggedUser", user.id);
-          setTimeout(() => {
-            window.location.href = "/";
-          }, 1000);
+      onAuthStateChanged(auth, (user) => {
+        if (user) {
+          // User is signed in, see docs for a list of available properties
+          // https://firebase.google.com/docs/reference/js/auth.user
+          const uid = user.uid;
+          console.log(user);
+          // ...
         } else {
-          notMatch.value = "Email and password don't match.";
+          // User is signed out
+          // ...
         }
       });
     });
@@ -61,7 +48,6 @@ export default {
       password,
       email,
       checkbox,
-      notMatch,
       submit,
       handleReset,
     };
@@ -104,7 +90,6 @@ export default {
 
         <v-btn @click="handleReset"> Clear Form </v-btn>
 
-        <p class="mt-3 text-red">{{ notMatch }}</p>
       </form>
     </v-card>
   </div>
