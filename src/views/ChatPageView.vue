@@ -1,7 +1,6 @@
 <script setup>
 import { useRoute } from "vue-router";
-import { ref, onMounted } from "vue";
-
+import { ref, onMounted, onUpdated, watch, computed, watchEffect } from "vue";
 
 import { set, get, ref as REF, child, getDatabase } from "firebase/database";
 import { database } from "../firebase";
@@ -17,42 +16,51 @@ const contact = ref({});
 const unitedId = ref("");
 
 const users = ref([]);
+const messages = ref([]);
+const changedMessages = ref([]);
 
 onMounted(() => {
   contactChatId.value = useRoute().params.chatId;
 
   get(child(dbRef, "/users"))
-  .then((snapshot) => {
-    if(snapshot.exists()) {
-      users.value = snapshot.val();
-    }
-  })
-  .then(() => {
-    users.value.filter((user) => {
-      if(user.chatId === parseInt(contactChatId.value)) {
-        contact.value = user;
+    .then((snapshot) => {
+      if (snapshot.exists()) {
+        users.value = snapshot.val();
       }
     })
-  })
-  .then(() => {
-    setTimeout(() => {
-    unitedId.value = parseInt(loggedUser.value.chatId) + parseInt(contactChatId.value);
-    console.log(unitedId.value);
-    console.log(contact.value);
-  }, 1000)
-  })
-})
+    .then(() => {
+      users.value.filter((user) => {
+        if (user.chatId === parseInt(contactChatId.value)) {
+          contact.value = user;
+        }
+      });
+    })
+    .then(() => {
+      setTimeout(() => {
+        unitedId.value =
+          parseInt(loggedUser.value.chatId) + parseInt(contactChatId.value);
 
+        get(child(dbRef, "/chats/" + unitedId.value + "/messages"))
+          .then((snapshot) => {
+            if (snapshot.exists()) {
+              messages.value = snapshot.val();
+            }
+          })
+          .then(() => {
+            changedMessages.value = messages.value;
+          });
+      }, 1000);
+    });
+});
 
 const addContact = () => {
   set(REF(database, "/chats/" + unitedId.value), {
     chatEmail: loggedUser.value.email + contact.value.email,
-    chatId: `${ loggedUser.value.chatId } - ${ contact.value.chatId }`,
-    chatName: `${ loggedUser.value.username } - ${ contact.value.username }`,
-    messages:""
+    chatId: `${loggedUser.value.chatId} - ${contact.value.chatId}`,
+    chatName: `${loggedUser.value.username} - ${contact.value.username}`,
+    messages: "",
   });
-}
-
+};
 
 const newMessage = ref("");
 
@@ -66,12 +74,36 @@ const addNewMessage = () => {
       },
     ]
   );
-  set(REF(database, "/chats/" + unitedId.value + "/messages"), messages.value);
+  set(
+    REF(database, "/chats/" + unitedId.value + "/messages"),
+    messages.value
+  ).then(() => {
+    get(child(dbRef, "/chats/" + unitedId.value + "/messages")).then(
+      (snapshot) => {
+        if (snapshot.exists()) {
+          messages.value = snapshot.val();
+        }
+      }
+    );
+  });
 };
+
+const change = () => {
+  get(child(dbRef, "/chats/" + unitedId.value + "/messages")).then((snapshot) => {
+      if (snapshot.exists()) {
+        messages.value = snapshot.val();
+      }
+    })
+    .then(() => {
+      console.log("hoverd");
+    })
+}
+
 </script>
 
 <template>
-  <header class="header">
+  <div @click="change" @mouseenter="change" @mouseleave="change">
+    <header class="header">
     <v-app-bar color="grey-darken-4" density="compact">
       <template v-slot:prepend>
         <v-app-bar-nav-icon
@@ -149,12 +181,14 @@ const addNewMessage = () => {
   <div class="mx-9">
     <v-list style="max-height: 500px" class="overflow-y-auto mt-15">
       <template v-slot>
-        <v-list-item v-for="message in messages" :key="message"
+        <v-list-item
+          v-for="message in messages"
+          :key="message"
           min-height="100"
           :class="
-          message.author === loggedUser.chatId
+            message.author === loggedUser.chatId
               ? 'bg-indigo-darken-3 mt-3 mx-auto me-5 rounded-xl'
-              : 'bg-grey-darken-3 mt-3 rounded-xl' 
+              : 'bg-grey-darken-3 mt-3 rounded-xl'
           "
           width="60%"
         >
@@ -164,7 +198,7 @@ const addNewMessage = () => {
               {{ message.message }}
               <br /><br />
             </v-list-tile-content>
-            <v-list-tile-footer> 6:08 PM </v-list-tile-footer>
+            <v-list-tile-footer> {{ message.date }} </v-list-tile-footer>
           </v-list-tile>
         </v-list-item>
       </template>
@@ -178,6 +212,7 @@ const addNewMessage = () => {
         @keyup.enter="addNewMessage"
       ></v-text-field>
     </v-responsive>
+  </div>
   </div>
 </template>
 
