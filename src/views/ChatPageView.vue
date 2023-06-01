@@ -3,16 +3,56 @@ import { useRoute } from "vue-router";
 import { ref, onMounted } from "vue";
 
 
-import { set, get, ref as REF, child } from "firebase/database";
+import { set, get, ref as REF, child, getDatabase } from "firebase/database";
 import { database } from "../firebase";
+const dbRef = REF(getDatabase());
 
+import { loggedUser } from "../auth";
 import { drawer, contactsDrawer, contactProfileDrawer } from "../script/index";
 import SideBarView from "../components/SidebarView.vue";
 import ContactsBarView from "../components/ContactsBarView.vue";
 
+const contactChatId = ref(0);
+const contact = ref({});
+const unitedId = ref("");
+
+const users = ref([]);
+
+onMounted(() => {
+  contactChatId.value = useRoute().params.chatId;
+
+  get(child(dbRef, "/users"))
+  .then((snapshot) => {
+    if(snapshot.exists()) {
+      users.value = snapshot.val();
+    }
+  })
+  .then(() => {
+    users.value.filter((user) => {
+      if(user.chatId === parseInt(contactChatId.value)) {
+        contact.value = user;
+      }
+    })
+  })
+  .then(() => {
+    setTimeout(() => {
+    unitedId.value = parseInt(loggedUser.value.chatId) + parseInt(contactChatId.value);
+    console.log(unitedId.value);
+    console.log(contact.value);
+  }, 1000)
+  })
+})
 
 
-const x = ref(false);
+const addContact = () => {
+  set(REF(database, "/chats/" + unitedId.value), {
+    chatEmail: loggedUser.value.email + contact.value.email,
+    chatId: `${ loggedUser.value.chatId } - ${ contact.value.chatId }`,
+    chatName: `${ loggedUser.value.username } - ${ contact.value.username }`,
+    messages:""
+  });
+}
+
 
 const newMessage = ref("");
 
@@ -26,7 +66,7 @@ const addNewMessage = () => {
       },
     ]
   );
-  set(REF(database, "/chats/" + unitedId + "/messages"), messages.value);
+  set(REF(database, "/chats/" + unitedId.value + "/messages"), messages.value);
 };
 </script>
 
@@ -44,9 +84,9 @@ const addNewMessage = () => {
         @click="contactProfileDrawer = !contactProfileDrawer"
       >
         <v-avatar>
-          <v-img :src="secondPersonAvatar" alt="Avatar"></v-img>
+          <v-img :src="contact.avatar" alt="Avatar"></v-img>
         </v-avatar>
-        {{ secondPersonUsername }}
+        {{ contact.username }}
       </v-app-bar-title>
 
       <template v-slot:append>
@@ -81,10 +121,10 @@ const addNewMessage = () => {
     >
       <v-list-item class="bg-grey-darken-3 pt-5 pb-5">
         <v-avatar>
-          <v-img :src="secondPersonAvatar" alt="Avatar"></v-img>
+          <v-img :src="contact.avatar" alt="Avatar"></v-img>
         </v-avatar>
-        <h4 class="mt-4">{{ secondPersonUsername }}</h4>
-        <h5 class="">{{ secondPersonEmail }}</h5>
+        <h4 class="mt-4">{{ contact.username }}</h4>
+        <h5 class="">{{ contact.email }}</h5>
         <h5></h5>
       </v-list-item>
 
