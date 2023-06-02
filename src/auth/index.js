@@ -12,7 +12,7 @@ const loggedUser = ref({});
 
 const users = ref([]);
 
-get(child(dbRef, `/users/`))
+get(child(dbRef, "/users"))
   .then((snapshot) => {
     if (snapshot.exists()) {
       users.value = snapshot.val();
