@@ -50,6 +50,7 @@ const findUsersViewView = ref(false);
         prepend-icon="mdi-door"
         title="Sign Out"
         value="signout"
+        class="bg-orange-darken-2"
       ></v-list-item>
     </v-list>
   </div>

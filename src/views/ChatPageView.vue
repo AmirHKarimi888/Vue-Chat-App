@@ -2,7 +2,6 @@
 import { useRoute } from "vue-router";
 import { ref, onMounted } from "vue";
 
-
 import { set, get, ref as REF, child, getDatabase } from "firebase/database";
 import { database } from "../firebase";
 const dbRef = REF(getDatabase());
@@ -107,21 +106,19 @@ const addNewMessage = () => {
       },
     ]
   );
-  set(
-    REF(database, "/chats/" + unitedId.value + "/messages"),
-    messages.value
-  ).then(() => {
-    get(child(dbRef, "/chats/" + unitedId.value + "/messages")).then(
-      (snapshot) => {
-        if (snapshot.exists()) {
-          messages.value = snapshot.val();
+  set(REF(database, "/chats/" + unitedId.value + "/messages"), messages.value)
+    .then(() => {
+      get(child(dbRef, "/chats/" + unitedId.value + "/messages")).then(
+        (snapshot) => {
+          if (snapshot.exists()) {
+            messages.value = snapshot.val();
+          }
         }
-      }
-    );
-  })
-  .then(() => {
-    newMessage.value = "";
-  })
+      );
+    })
+    .then(() => {
+      newMessage.value = "";
+    });
 };
 
 const change = () => {
@@ -129,6 +126,8 @@ const change = () => {
     .then((snapshot) => {
       if (snapshot.exists()) {
         messages.value = snapshot.val();
+      } else {
+        messages.value = "";
       }
     })
     .then(() => {
@@ -138,13 +137,7 @@ const change = () => {
 </script>
 
 <template>
-  <div
-    @change="(messages) => change()"
-    @click="change"
-    @mouseenter="change"
-    @mouseleave="change"
-    @touchstart="change"
-  >
+  <div>
     <header class="header">
       <v-app-bar color="grey-darken-4" density="compact">
         <template v-slot:prepend>
@@ -208,13 +201,15 @@ const change = () => {
             prepend-icon="mdi-magnify"
             title="Add To Your Contacts"
             value=""
+            class="bg-green-darken-4"
           ></v-list-item>
 
           <v-list-item
             @click="deleteContact"
             prepend-icon="mdi-door"
-            title="Block This User"
+            title="Delete This Contact"
             value=""
+            class="bg-red-darken-4"
           ></v-list-item>
         </v-list>
       </v-navigation-drawer>
@@ -225,6 +220,10 @@ const change = () => {
         style="max-height: 500px"
         class="overflow-y-auto mt-15"
         @touchstart="change"
+        @change="(messages) => change()"
+        @click="change"
+        @mouseenter="change"
+        @mouseleave="change"
       >
         <template v-slot>
           <v-list-item
@@ -250,14 +249,18 @@ const change = () => {
         </template>
       </v-list>
 
-      <v-responsive class="mx-auto" max-width="344">
-        <v-text-field
-          label="Enter Your Message"
-          hide-details="auto"
-          v-model="newMessage"
-          @keyup.enter="addNewMessage"
-        ></v-text-field>
-      </v-responsive>
+      <br /><br />
+      <v-text-field
+        v-model="newMessage"
+        density="compact"
+        variant="solo"
+        label="Send Message"
+        append-inner-icon="mdi-send"
+        single-line
+        hide-details
+        @click:append-inner="addNewMessage"
+        @keyup.enter="addNewMessage"
+      ></v-text-field>
     </div>
   </div>
 </template>
