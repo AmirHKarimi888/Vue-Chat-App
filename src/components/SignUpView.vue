@@ -82,7 +82,12 @@ export default {
         avatar: `https://xsgames.co/randomusers/assets/avatars/pixel/${
           users.value.length + 1
         }.jpg`,
-        contacts: [],
+        contacts: [{
+          username: "",
+          avatar: "",
+          chatId: "",
+          email: ""
+        }],
         isAdmin: false,
         isLogin: true,
       };

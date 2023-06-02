@@ -7,7 +7,7 @@ import { drawer, contactsDrawer } from '../script';
     class="bg-grey-darken-3 d-flex align-center justify-center flex-wrap text-center mx-auto"
     elevation="4"
     rounded
-    width="70%"
+    width="72%"
     style="margin-top: 240px"
   >
     <div class="mx-5 my-5">
